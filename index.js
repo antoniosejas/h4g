@@ -11,13 +11,13 @@ app.configure(function () {
 });
 
 
-routes = require('./routes/spots')(app);
+routes = require('./routes/audioSpots')(app);
 
 app.get('/', function(req, res) {
   res.send("Hello world!");
 });
 
-mongoose.connect('mongodb://localhost/spots', function(err, res) {
+mongoose.connect('mongodb://localhost/audioSpots', function(err, res) {
   if(err) {
     console.log('ERROR: connecting to Database. ' + err);
   } else {
