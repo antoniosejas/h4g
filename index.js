@@ -1,22 +1,24 @@
 var express = require("express"),
     app     = express(),
-    http    = require("http"),
-    server  = http.createServer(app);
     mongoose = require('mongoose');
+
+//Middleware: Allows cross-domain requests (CORS)
+var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+
+    next();
+}
 
 app.configure(function () {
   app.use(express.bodyParser());
   app.use(express.methodOverride());
+  app.use(allowCrossDomain);
   app.use(app.router);
 });
 
-
 routes = require('./routes/audioSpots')(app);
-
-app.get('/', function(req, res) {
-  res.send("Hello world!");
-});
-
 mongoose.connect('mongodb://localhost/audioSpots', function(err, res) {
   if(err) {
     console.log('ERROR: connecting to Database. ' + err);
@@ -25,6 +27,6 @@ mongoose.connect('mongodb://localhost/audioSpots', function(err, res) {
   }
 });
 
-server.listen(3000, function() {
+app.listen(3000, function() {
   console.log("Node server running on http://localhost:3000");
 });
