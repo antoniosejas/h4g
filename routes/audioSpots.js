@@ -34,7 +34,8 @@ module.exports = function(app) {
 			name: req.body.name,
 			longitude: req.body.longitude,
 			latitude: req.body.latitude,
-			description: req.body.description
+			description: req.body.description,
+			audiodata: req.body.audiodata,
 		});
 
 		audioSpot.save(function(err) {
@@ -50,12 +51,11 @@ module.exports = function(app) {
 	//PUT - Update a register already exists
 	updateAudioSpot = function(req, res) {
 		AudioSpot.findById(req.params.id, function(err, audioSpot) {
-			audioSpot.name = req.body.name;
-			audioSpot.longitude = req.body.longitude;
-			audioSpot.latitude = req.body.latitude;
-			audioSpot.description  = req.body.description;
-			audioSpot.image = req.body.image;
-			audioSpot.clasification   = req.body.clasification;
+			/*name: req.body.name,
+			longitude: req.body.longitude,
+			latitude: req.body.latitude,
+			description: req.body.description,
+			audiodata: req.body.audiodata*/
 
 			audioSpot.save(function(err) {
 				if(!err) {
