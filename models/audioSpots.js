@@ -6,7 +6,7 @@ var audioSpotSchema = new Schema({
   longitude:     { type: Number },
   latitude:  { type: Number },
   description:   { type: String },
-  audiodata:   { type: Buffer}
+  audiodata:   { type: String}
 });
 
 module.exports = mongoose.model('audioSpot', audioSpotSchema);
