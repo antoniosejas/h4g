@@ -1,7 +1,8 @@
-//File: routes/audioSpots.js
+//File: routes/messages.js
 module.exports = function(app) {
 
 	var AudioSpot = require('../models/audioSpots.js');
+	var account= require('../models/account.js');
 
 	//GET - Return all the audioSpots in the DB
 	findAllAudioSpots = function(req, res) {
@@ -35,7 +36,7 @@ module.exports = function(app) {
 			longitude: req.body.longitude,
 			latitude: req.body.latitude,
 			description: req.body.description,
-			audiodata: req.body.audiodata,
+			audiodata: req.body.audiodata
 		});
 
 		audioSpot.save(function(err) {
@@ -81,10 +82,24 @@ module.exports = function(app) {
 		});
 	}
 
+	//TODO: This is duplicated, shouldn't be
+	function ensureAuthenticated(req, res, next) {
+		console.log('params:'+JSON.stringify(req.query.uid));
+		account.findById(req.query.uid, function(err, foundUser) {
+			if(!err && foundUser !== null) {
+				console.log('Authorized')
+				return next();
+			} else {
+				console.log('Unauthorized');
+				res.send('Unauthorized');
+			}
+		})
+	}
+
 	//Link routes and functions
-	app.get('/audioSpots', findAllAudioSpots);
-	app.get('/audioSpot/:id', findById);
-	app.post('/audioSpot', addAudioSpot);
-	app.put('/audioSpot/:id', updateAudioSpot);
-	app.delete('/audioSpot/:id', deleteAudioSpot);
+	app.get('/audioSpots', ensureAuthenticated, findAllAudioSpots);
+	app.get('/audioSpot/:id', ensureAuthenticated, findById);
+	app.post('/audioSpot', ensureAuthenticated, addAudioSpot);
+	app.put('/audioSpot/:id', ensureAuthenticated, updateAudioSpot);
+	app.delete('/audioSpot/:id', ensureAuthenticated, deleteAudioSpot);
 }
