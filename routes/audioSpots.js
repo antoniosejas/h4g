@@ -36,7 +36,8 @@ module.exports = function(app) {
 			longitude: req.body.longitude,
 			latitude: req.body.latitude,
 			description: req.body.description,
-			audiodata: req.body.audiodata
+			audiodata: req.body.audiodata,
+			uploader: req.query.uid
 		});
 
 		audioSpot.save(function(err) {
@@ -84,7 +85,10 @@ module.exports = function(app) {
 
 	//TODO: This is duplicated, shouldn't be
 	function ensureAuthenticated(req, res, next) {
-		console.log('params:'+JSON.stringify(req.query.uid));
+		if (!req.query.uid){
+			req.query.uid = req.body.uid;
+		}
+		console.log('UID:'+req.query.uid);
 		account.findById(req.query.uid, function(err, foundUser) {
 			if(!err && foundUser !== null) {
 				console.log('Authorized')

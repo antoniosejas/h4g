@@ -44,6 +44,10 @@ module.exports = function(app) {
 
 	//TODO: This is duplicated, shouldn't be
 	function ensureAuthenticated(req, res, next) {
+		if (!req.query.uid){
+			req.query.uid = req.body.uid;
+		}
+		console.log('UID:'+req.query.uid);
 		Account.findById(req.query.uid, function(err, foundUser) {
 			if(!err && foundUser !== null) {
 				console.log('Authorized')
@@ -54,7 +58,6 @@ module.exports = function(app) {
 			}
 		})
 	}
-
 
   	app.get('/user', ensureAuthenticated, function(req,res){
   	//GET - Return user info by its id
